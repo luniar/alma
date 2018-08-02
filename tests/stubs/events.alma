@@ -1,0 +1,10 @@
+hello {
+    @say "Hello"
+}
+
+world {
+    @say "World."
+}
+
+@listen hello
+@listen world
