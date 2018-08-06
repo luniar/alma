@@ -2,13 +2,14 @@
 
 namespace Luniar\Alma;
 
+use Luniar\Alma\Contracts\Parser as ParserContract;
 use Luniar\Alma\Contracts\Specification;
 use Luniar\Alma\Contracts\Token;
 use Luniar\Alma\Contracts\Tokenable;
 use Luniar\Alma\Contracts\TokenGroup;
 use Luniar\Alma\Exceptions\InvalidSyntaxException;
 
-class Parser
+class Parser implements ParserContract
 {
 	protected $context;
 
@@ -24,7 +25,7 @@ class Parser
         $this->parseContents($contents, $this->context->tokens());
     }
 
-    public function parseContents($contents, $tokens)
+    protected function parseContents($contents, $tokens)
     {
         for ($index = 0; $index < count($contents); $index++) {
             $line = trim($contents[$index]);
@@ -49,7 +50,7 @@ class Parser
         }
     }
 
-    public function handle(Context $context, array $tokens, array $contents, int $index)
+    protected function handle(Context $context, array $tokens, array $contents, int $index)
     {
         $length = count($contents);
         $last = count($tokens) - 1;
