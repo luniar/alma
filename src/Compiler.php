@@ -4,6 +4,7 @@ namespace Luniar\Alma;
 
 use Luniar\Alma\Contracts\Compiler as CompilerContract;
 use Luniar\Alma\Contracts\Context;
+use Luniar\Alma\Parser;
 
 class Compiler implements CompilerContract
 {
@@ -14,31 +15,9 @@ class Compiler implements CompilerContract
 
     public function compile(string $contents, Context $context)
     {
-        $contents = explode(PHP_EOL, $contents);
-
-        // Build context
-        $this->buildContext($context, $contents);
+        (new Parser($context))->parse($contents);
 
         return $context->handle();
-    }
-
-    protected function buildContext(Context $context, array $contents)
-    {
-        // Load context specifications
-        $specifications = $context->specifications();
-
-        for ($index = 0; $index < count($contents); $index++) {
-            $line = trim($contents[$index]);
-
-            // Check for a specification beginning
-            foreach ($specifications as $specification) {
-                if (! $specification->matches($line)) {
-                    continue;
-                }
-
-                $index = $specification->handle($context, $contents, $index);
-            }
-        }
     }
 
 }

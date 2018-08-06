@@ -4,6 +4,7 @@ namespace Luniar\Alma\Tests\Stubs\Contexts;
 
 use Luniar\Alma\Context;
 use Luniar\Alma\Tests\Stubs\Specifications\EventSpecification;
+use Luniar\Alma\Tests\Stubs\Specifications\Listener\ListenToken;
 use Luniar\Alma\Tests\Stubs\Specifications\ListenerSpecification;
 
 class EventsContext extends Context
@@ -14,11 +15,11 @@ class EventsContext extends Context
         return $this->state->get();
     }
 
-    public function specifications() : array
+    public function tokens() : array
     {
         return [
             new EventSpecification,
-            new ListenerSpecification,
+            new ListenToken,
         ];
     }
 

@@ -9,12 +9,9 @@ use Luniar\Alma\Tests\Stubs\Specifications\Event\EventStartToken;
 
 class EventSpecification extends Specification
 {
-    public function tokens() : array
-    {
-        return [
-            new EventStartToken,
-            new SayToken,
-            new EventFinishToken,
-        ];
-    }
+    protected $tokens = [
+        EventStartToken::class,
+        SayToken::class,
+        EventFinishToken::class,
+    ];
 }

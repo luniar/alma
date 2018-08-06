@@ -3,10 +3,10 @@
 namespace Luniar\Alma\Contracts;
 
 use Luniar\Alma\Contracts\Context;
+use Luniar\Alma\Contracts\Tokenable;
+use Luniar\Alma\Contracts\TokenGroup;
 
-interface Specification
+interface Specification extends Tokenable, TokenGroup
 {
     public function tokens(): array;
-    public function matches(string $line): bool;
-    public function handle(Context $context, array $contents, int $index);
 }

@@ -11,6 +11,11 @@ abstract class Token implements TokenContract
     public abstract function expression() : string;
     public abstract function handle(Context $context, array $matches): void;
 
+    public function matches(string $line): bool
+    {
+        return $this->getMatches($line) !== null;
+    }
+
     public function getMatches(string $line): ?array
     {
         $matches = [];

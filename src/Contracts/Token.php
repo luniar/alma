@@ -3,8 +3,9 @@
 namespace Luniar\Alma\Contracts;
 
 use Luniar\Alma\Contracts\Context;
+use Luniar\Alma\Contracts\Tokenable;
 
-interface Token
+interface Token extends Tokenable
 {
     public function key(): string;
     public function expression(): string;

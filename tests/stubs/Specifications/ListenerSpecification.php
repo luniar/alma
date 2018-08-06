@@ -7,10 +7,7 @@ use Luniar\Alma\Tests\Stubs\Specifications\Listener\ListenToken;
 
 class ListenerSpecification extends Specification
 {
-    public function tokens() : array
-    {
-        return [
-            new ListenToken,
-        ];
-    }
+    protected $tokens = [
+        ListenToken::class,
+    ];
 }
