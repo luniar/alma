@@ -5,7 +5,6 @@ namespace Luniar\Alma\Tests\Stubs\Contexts;
 use Luniar\Alma\Context;
 use Luniar\Alma\Tests\Stubs\Specifications\EventSpecification;
 use Luniar\Alma\Tests\Stubs\Specifications\Listener\ListenToken;
-use Luniar\Alma\Tests\Stubs\Specifications\ListenerSpecification;
 
 class EventsContext extends Context
 {

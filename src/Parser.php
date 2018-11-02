@@ -2,79 +2,139 @@
 
 namespace Luniar\Alma;
 
+use Luniar\Alma\Contracts\Context;
 use Luniar\Alma\Contracts\Parser as ParserContract;
 use Luniar\Alma\Contracts\Specification;
 use Luniar\Alma\Contracts\Token;
-use Luniar\Alma\Contracts\Tokenable;
 use Luniar\Alma\Contracts\TokenGroup;
-use Luniar\Alma\Exceptions\InvalidSyntaxException;
+use Luniar\Alma\TokenResolver;
+use \InvalidArgumentException;
 
 class Parser implements ParserContract
 {
-	protected $context;
-
-    public function __construct($context)
-    {
-        $this->context = $context;
-    }
-
-    public function parse($contents)
+    public function parse(string $contents, Context $context): void
     {
         $contents = explode(PHP_EOL, $contents);
 
-        $this->parseContents($contents, $this->context->tokens());
+        $this->parseCompiled(
+            $this->precompile($contents, $context, $context->tokens(), []),
+            $context
+        );
     }
 
-    protected function parseContents($contents, $tokens)
+    public function parseCompiled(array $compiled, Context $context): void
     {
-        for ($index = 0; $index < count($contents); $index++) {
-            $line = trim($contents[$index]);
+        if (count($compiled) == 0) {
+            return;
+        }
 
-            // Check for a specification beginning
-            foreach ($tokens as $token) {
-                if (! $token->matches($line)) {
-                    continue;
-                }
+        $block = array_shift($compiled);
 
-                if (! ($token instanceof Tokenable)) {
-                    throw new IllegalArgumentException('An invalid token was passed to the parser.');
-                }
+        if (is_array($block['value'])) {
+            $this->parseCompiled($block['value'], $context);
+            $this->parseCompiled($compiled, $context);
+            return;
+        }
 
-                $this->handle(
-                    $this->context,
-                    $token instanceof TokenGroup ? $token->tokens() : [$token],
+        $token = new $block['key'];
+        $token->handle($context, $block['matches']); // could also pass the args here..
+
+        $this->parseCompiled($compiled, $context);
+    }
+
+    public function precompile(array $contents, Context $context, array $tokens, array $result = []): array
+    {
+        if (count($contents) == 0) {
+            return $result;
+        }
+
+        $line = trim(array_shift($contents));
+
+        $result = $this->compileTokens($contents, $context, $tokens, $line, $result);
+
+        return $this->precompile($contents, $context, $tokens, $result);
+    }
+
+    protected function compileGroup(Token $last, array &$contents, Context $context, array $tokens, array $result): array
+    {
+        if (count($contents) == 0) {
+            return $result;
+        }
+
+        $line = trim(array_shift($contents));
+
+        if ($last->matches($line)) {
+            $result[] = $this->formatToken($last, $line);
+            return $result;
+        }
+
+        $result = $this->compileTokens($contents, $context, $tokens, $line, $result);
+
+        return $this->compileGroup($last, $contents, $context, $tokens, $result);
+    }
+
+    protected function compileTokens(array &$contents, Context $context, array $tokens, string $line, array $result): array
+    {
+        foreach ($tokens as $token) {
+            $token = TokenResolver::resolve($token);
+
+            if (! $token->matches($line)) {
+                continue;
+            }
+
+            if ($token instanceof Token) {
+                $result[] = $this->formatToken($token, $line);
+                break;
+            }
+
+            if ($token instanceof TokenGroup) {
+                $spec = $token; // alias just to improve reading
+                $newTokens = $spec->tokens();
+                $lastToken = array_pop($newTokens);
+
+                $groupResult = $this->compileGroup(
+                    new $lastToken,
                     $contents,
-                    $index
+                    $context,
+                    $spec->tokens(),
+                    []
                 );
+
+                $result[] = $this->formatTokenGroup($spec, $line, $groupResult);
+                break;
             }
+
+            throw new InvalidArgumentException('An invalid token was passed to the parser.');
         }
+
+        return $result;
     }
 
-    protected function handle(Context $context, array $tokens, array $contents, int $index)
+    protected function formatToken(Token $token, string $line): array
     {
-        $length = count($contents);
-        $last = count($tokens) - 1;
-
-        for (; $index < $length; $index++) {
-            $line = trim($contents[$index]);
-
-            foreach ($tokens as $key => $token) {
-                $token = TokenResolver::resolve($token);
-
-                $matches = $token->getMatches($line);
-
-                if (! $matches) {
-                    continue;
-                }
-
-                $token->handle($this->context, $matches);
-
-                if ($key === $last) {
-                    return $index;
-                }
-            }
-        }
-
-        throw new InvalidSyntaxException;
+        return [
+            'key' => get_class($token),
+            'value' => $line,
+            'args' => [],
+            'matches' => $token->getMatches($line),
+        ];
     }
+
+    protected function formatTokenGroup(Specification $spec, string $line, array $group): array
+    {
+        $tokenClass = $spec->tokens()[0];
+        $token = new $tokenClass;
+
+        return [
+            'key' => get_class($spec),
+            'value' => array_merge([[
+                'key' => $tokenClass,
+                'value' => $line,
+                'args' => [],
+                'matches' => $token->getMatches($line),
+            ]], $group),
+            'args' => [],
+        ];
+    }
+
 }

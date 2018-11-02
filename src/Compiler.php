@@ -4,10 +4,20 @@ namespace Luniar\Alma;
 
 use Luniar\Alma\Contracts\Compiler as CompilerContract;
 use Luniar\Alma\Contracts\Context;
-use Luniar\Alma\Parser;
+use Luniar\Alma\Contracts\Parser;
 
 class Compiler implements CompilerContract
 {
+    /**
+     * @var \Luniar\Alma\Contracts\Parser
+     */
+    protected $parser;
+
+    public function __construct(Parser $parser)
+    {
+        $this->parser = $parser;
+    }
+
     public function compileFromFile(string $path, Context $context)
     {
         return $this->compile(file_get_contents($path), $context);
@@ -15,7 +25,7 @@ class Compiler implements CompilerContract
 
     public function compile(string $contents, Context $context)
     {
-        (new Parser($context))->parse($contents);
+        $this->parser->parse($contents, $context);
 
         return $context->handle();
     }

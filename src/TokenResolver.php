@@ -2,13 +2,13 @@
 
 namespace Luniar\Alma;
 
-use Luniar\Alma\Contracts\Token;
+use Luniar\Alma\Contracts\Tokenable;
 
 class TokenResolver
 {
     public static function resolve($token)
     {
-        if ($token instanceof Token) {
+        if ($token instanceof Tokenable) {
             return $token;
         }
 
@@ -16,6 +16,6 @@ class TokenResolver
             return new $token;
         }
 
-        throw new IllegalArgumentException('Token type is not recognized.');
+        throw new InvalidArgumentException('Token type is not recognized.');
     }
 }
