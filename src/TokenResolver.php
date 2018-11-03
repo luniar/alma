@@ -8,12 +8,12 @@ class TokenResolver
 {
     public static function resolve($token)
     {
-        if ($token instanceof Tokenable) {
-            return $token;
+        if (is_string($token)) {
+            $token = new $token;
         }
 
-        if (is_string($token)) {
-            return new $token;
+        if ($token instanceof Tokenable) {
+            return $token;
         }
 
         throw new InvalidArgumentException('Token type is not recognized.');
