@@ -1,6 +1,6 @@
 <?php
 
-namespace Luniar\Alma\Tests\Stubs\Specifications\Event;
+namespace Luniar\Alma\Tests\Stubs\Groups\Event;
 
 use Luniar\Alma\Contracts\Context;
 use Luniar\Alma\Token;

@@ -1,25 +1,25 @@
 <?php
 
-namespace Luniar\Alma\Tests\Stubs\Specifications\Shared;
+namespace Luniar\Alma\Tests\Stubs\Groups\Event;
 
 use Luniar\Alma\Contracts\Context;
 use Luniar\Alma\Token;
 
-class SayToken extends Token
+class EventFinishToken extends Token
 {
     public function key() : string
     {
-        return 'SAY_TOKEN';
+        return 'EVENT_FINISH';
     }
 
     public function expression() : string
     {
-        return '/^@say\s"(.+)"/';
+        return '/^}/';
     }
 
     public function handle(Context $context, array $matches): void
     {
-        $context->commit('say', $matches[1]);
+        $context->finish();
     }
 
 }

@@ -2,10 +2,10 @@
 
 namespace Luniar\Alma;
 
-use Luniar\Alma\Contracts\Specification as SpecificationContract;
+use Luniar\Alma\Contracts\Group as GroupContract;
 use Luniar\Alma\TokenResolver;
 
-abstract class Specification implements SpecificationContract
+abstract class Group implements GroupContract
 {
 	protected $tokens = [];
 

@@ -4,7 +4,7 @@ namespace Luniar\Alma;
 
 use Luniar\Alma\Contracts\Context;
 use Luniar\Alma\Contracts\Parser as ParserContract;
-use Luniar\Alma\Contracts\Specification;
+use Luniar\Alma\Contracts\Group;
 use Luniar\Alma\Contracts\Token;
 use Luniar\Alma\Contracts\TokenGroup;
 use Luniar\Alma\TokenResolver;
@@ -120,7 +120,7 @@ class Parser implements ParserContract
         ];
     }
 
-    protected function formatTokenGroup(Specification $spec, string $line, array $group): array
+    protected function formatTokenGroup(Group $spec, string $line, array $group): array
     {
         $tokenClass = $spec->tokens()[0];
         $token = new $tokenClass;
