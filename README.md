@@ -8,3 +8,6 @@
 - [ ] Add more tests.
 - [ ] Add variable interpretation when parsing.
 - [ ] Improve the State mechanism.
+- [ ] Make token expression easier to write
+    - Using a regex fluent interface
+    - Using a string that would later be interpreted
