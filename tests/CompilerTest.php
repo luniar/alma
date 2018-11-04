@@ -36,4 +36,13 @@ class CompilerTest extends TestCase
         $this->assertArrayHasKey('listeners', $result);
         $this->assertArrayHasKey('test', $result['listeners']);
     }
+
+    /** @test */
+    function it_precompiles_contents()
+    {
+        $result = $this->compiler->precompileFromFile(__DIR__ . '/stubs/events.alma', $this->context);
+
+        $precompiled = require 'precompiled/events.php';
+        $this->assertEquals($precompiled, $result);
+    }
 }

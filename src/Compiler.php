@@ -25,9 +25,27 @@ class Compiler implements CompilerContract
 
     public function compile(string $contents, Context $context)
     {
-        $this->parser->parse($contents, $context);
+        $this->parser->parse($this->formatContents($contents), $context);
 
         return $context->handle();
     }
 
+    public function precompileFromFile(string $path, Context $context)
+    {
+        return $this->precompile(file_get_contents($path), $context);
+    }
+
+    public function precompile(string $contents, Context $context)
+    {
+        return $this->parser->precompile(
+            $this->formatContents($contents),
+            $context,
+            $context->tokens()
+        );
+    }
+
+    protected function formatContents(string $contents): array
+    {
+        return explode(PHP_EOL, $contents);
+    }
 }

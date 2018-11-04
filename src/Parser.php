@@ -12,10 +12,8 @@ use \InvalidArgumentException;
 
 class Parser implements ParserContract
 {
-    public function parse(string $contents, Context $context): void
+    public function parse(array $contents, Context $context): void
     {
-        $contents = explode(PHP_EOL, $contents);
-
         $this->parseCompiled(
             $this->precompile($contents, $context, $context->tokens(), []),
             $context
