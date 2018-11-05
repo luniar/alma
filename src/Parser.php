@@ -86,19 +86,19 @@ class Parser implements ParserContract
             }
 
             if ($token instanceof TokenGroup) {
-                $spec = $token; // alias just to improve reading
-                $newTokens = $spec->tokens();
+                $group = $token; // alias just to improve reading
+                $newTokens = $group->tokens();
                 $lastToken = array_pop($newTokens);
 
                 $groupResult = $this->compileGroup(
                     new $lastToken,
                     $contents,
                     $context,
-                    $spec->tokens(),
+                    $group->tokens(),
                     []
                 );
 
-                $result[] = $this->formatTokenGroup($spec, $line, $groupResult);
+                $result[] = $this->formatTokenGroup($group, $line, $groupResult);
                 break;
             }
 
@@ -118,19 +118,19 @@ class Parser implements ParserContract
         ];
     }
 
-    protected function formatTokenGroup(Group $spec, string $line, array $group): array
+    protected function formatTokenGroup(Group $group, string $line, array $result): array
     {
-        $tokenClass = $spec->tokens()[0];
+        $tokenClass = $group->tokens()[0];
         $token = new $tokenClass;
 
         return [
-            'key' => get_class($spec),
+            'key' => get_class($group),
             'value' => array_merge([[
                 'key' => $tokenClass,
                 'value' => $line,
                 'args' => [],
                 'matches' => $token->getMatches($line),
-            ]], $group),
+            ]], $result),
             'args' => [],
         ];
     }
