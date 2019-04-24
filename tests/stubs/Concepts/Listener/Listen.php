@@ -6,7 +6,7 @@ use Luniar\Alma\Contracts\Context;
 use Luniar\Alma\Fragment;
 use SRL\Builder;
 
-class ListenFragment extends Fragment
+class Listen extends Fragment
 {
     public function key() : string
     {

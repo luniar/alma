@@ -3,15 +3,15 @@
 namespace Luniar\Alma\Tests\Stubs\Concepts;
 
 use Luniar\Alma\Concept;
-use Luniar\Alma\Tests\Stubs\Concepts\Shared\SayFragment;
-use Luniar\Alma\Tests\Stubs\Concepts\Event\EventFinishFragment;
-use Luniar\Alma\Tests\Stubs\Concepts\Event\EventStartFragment;
+use Luniar\Alma\Tests\Stubs\Concepts\Shared\Say;
+use Luniar\Alma\Tests\Stubs\Concepts\Event\EventFinish;
+use Luniar\Alma\Tests\Stubs\Concepts\Event\EventStart;
 
 class EventConcept extends Concept
 {
     protected $fragments = [
-        EventStartFragment::class,
-        SayFragment::class,
-        EventFinishFragment::class,
+        EventStart::class,
+        Say::class,
+        EventFinish::class,
     ];
 }

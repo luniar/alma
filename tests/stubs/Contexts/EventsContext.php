@@ -4,7 +4,7 @@ namespace Luniar\Alma\Tests\Stubs\Contexts;
 
 use Luniar\Alma\Context;
 use Luniar\Alma\Tests\Stubs\Concepts\EventConcept;
-use Luniar\Alma\Tests\Stubs\Concepts\Listener\ListenFragment;
+use Luniar\Alma\Tests\Stubs\Concepts\Listener\Listen;
 
 class EventsContext extends Context
 {
@@ -18,7 +18,7 @@ class EventsContext extends Context
     {
         return [
             new EventConcept,
-            new ListenFragment,
+            new Listen,
         ];
     }
 

@@ -6,7 +6,7 @@ use Luniar\Alma\Contracts\Context;
 use Luniar\Alma\Fragment;
 use SRL\Builder;
 
-class EventStartFragment extends Fragment
+class EventStart extends Fragment
 {
     public function key() : string
     {
