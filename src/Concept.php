@@ -2,10 +2,10 @@
 
 namespace Luniar\Alma;
 
-use Luniar\Alma\Contracts\Group as GroupContract;
+use Luniar\Alma\Contracts\Concept as ConceptContract;
 use Luniar\Alma\TokenResolver;
 
-abstract class Group implements GroupContract
+abstract class Concept implements ConceptContract
 {
 	protected $tokens = [];
 

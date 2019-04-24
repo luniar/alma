@@ -2,7 +2,7 @@
 
 namespace Luniar\Alma\Contracts;
 
-interface TokenGroup
+interface TokenConcept
 {
     public function tokens(): array;
 }

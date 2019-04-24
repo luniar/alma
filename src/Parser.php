@@ -4,9 +4,9 @@ namespace Luniar\Alma;
 
 use Luniar\Alma\Contracts\Context;
 use Luniar\Alma\Contracts\Parser as ParserContract;
-use Luniar\Alma\Contracts\Group;
+use Luniar\Alma\Contracts\Concept;
 use Luniar\Alma\Contracts\Token;
-use Luniar\Alma\Contracts\TokenGroup;
+use Luniar\Alma\Contracts\TokenConcept;
 use Luniar\Alma\TokenResolver;
 use \InvalidArgumentException;
 
@@ -53,7 +53,7 @@ class Parser implements ParserContract
         return $this->precompile($contents, $context, $tokens, $result);
     }
 
-    protected function compileGroup(Token $last, array &$contents, Context $context, array $tokens, array $result): array
+    protected function compileConcept(Token $last, array &$contents, Context $context, array $tokens, array $result): array
     {
         if (count($contents) == 0) {
             return $result;
@@ -68,7 +68,7 @@ class Parser implements ParserContract
 
         $result = $this->compileTokens($contents, $context, $tokens, $line, $result);
 
-        return $this->compileGroup($last, $contents, $context, $tokens, $result);
+        return $this->compileConcept($last, $contents, $context, $tokens, $result);
     }
 
     protected function compileTokens(array &$contents, Context $context, array $tokens, string $line, array $result): array
@@ -85,12 +85,12 @@ class Parser implements ParserContract
                 break;
             }
 
-            if ($token instanceof TokenGroup) {
+            if ($token instanceof TokenConcept) {
                 $group = $token; // alias just to improve reading
                 $newTokens = $group->tokens();
                 $lastToken = array_pop($newTokens);
 
-                $groupResult = $this->compileGroup(
+                $groupResult = $this->compileConcept(
                     new $lastToken,
                     $contents,
                     $context,
@@ -98,7 +98,7 @@ class Parser implements ParserContract
                     []
                 );
 
-                $result[] = $this->formatTokenGroup($group, $line, $groupResult);
+                $result[] = $this->formatTokenConcept($group, $line, $groupResult);
                 break;
             }
 
@@ -118,7 +118,7 @@ class Parser implements ParserContract
         ];
     }
 
-    protected function formatTokenGroup(Group $group, string $line, array $result): array
+    protected function formatTokenConcept(Concept $group, string $line, array $result): array
     {
         $tokenClass = $group->tokens()[0];
         $token = new $tokenClass;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Luniar\Alma\Tests\Stubs\Groups\Shared;
+namespace Luniar\Alma\Tests\Stubs\Concepts\Shared;
 
 use Luniar\Alma\Contracts\Context;
 use Luniar\Alma\Token;

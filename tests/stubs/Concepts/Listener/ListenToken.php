@@ -1,6 +1,6 @@
 <?php
 
-namespace Luniar\Alma\Tests\Stubs\Groups\Listener;
+namespace Luniar\Alma\Tests\Stubs\Concepts\Listener;
 
 use Luniar\Alma\Contracts\Context;
 use Luniar\Alma\Token;
