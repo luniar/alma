@@ -112,8 +112,8 @@ class Parser implements ParserContract
     {
         return [
             'key' => get_class($token),
+            'type' => 'fragment',
             'value' => $line,
-            'args' => [],
             'matches' => $token->getMatches($line),
         ];
     }
@@ -125,13 +125,8 @@ class Parser implements ParserContract
 
         return [
             'key' => get_class($group),
-            'value' => array_merge([[
-                'key' => $tokenClass,
-                'value' => $line,
-                'args' => [],
-                'matches' => $token->getMatches($line),
-            ]], $result),
-            'args' => [],
+            'type' => 'concept',
+            'value' => array_merge([$this->formatToken($token, $line)], $result),
         ];
     }
 
