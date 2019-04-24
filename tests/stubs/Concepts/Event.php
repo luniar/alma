@@ -1,19 +1,22 @@
 <?php
 
-namespace Luniar\Alma\Tests\Stubs\Concepts\Event;
+namespace Luniar\Alma\Tests\Stubs\Concepts;
 
 use Luniar\Alma\Contracts\Context;
-use Luniar\Alma\Fragment;
+use Luniar\Alma\Contracts\MultilineConcept;
+use Luniar\Alma\Tests\Stubs\Concepts\Say;
 use SRL\Builder;
 
-class EventStart extends Fragment
+class Event implements MultilineConcept
 {
-    public function key() : string
+    public function concepts(): array
     {
-        return 'EVENT_START';
+        return [
+            new Say,
+        ];
     }
 
-    public function expression(Builder $expression) : string
+    public function startsWith(Builder $expression): string
     {
         return $expression->startsWith()
             ->capture(function (Builder $expression) {
@@ -30,4 +33,13 @@ class EventStart extends Fragment
         ]);
     }
 
+    public function endsWith(Builder $expression): string
+    {
+        return $expression->literally('}')->mustEnd();
+    }
+
+    public function close(Context $context): void
+    {
+        $context->finish();
+    }
 }

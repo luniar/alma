@@ -2,7 +2,8 @@
 
 namespace Luniar\Alma\Contracts;
 
-interface Fragmentable
+interface Interpretable
 {
+    public function getMatches(string $line): ?array;
     public function matches(string $line): bool;
 }

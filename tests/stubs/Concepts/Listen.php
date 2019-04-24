@@ -1,19 +1,14 @@
 <?php
 
-namespace Luniar\Alma\Tests\Stubs\Concepts\Listener;
+namespace Luniar\Alma\Tests\Stubs\Concepts;
 
+use Luniar\Alma\Contracts\Concept;
 use Luniar\Alma\Contracts\Context;
-use Luniar\Alma\Fragment;
 use SRL\Builder;
 
-class Listen extends Fragment
+class Listen implements Concept
 {
-    public function key() : string
-    {
-        return 'LISTEN_TO_EVENT';
-    }
-
-    public function expression(Builder $expression) : string
+    public function startsWith(Builder $expression) : string
     {
         return $expression->startsWith()->literally('@listen')
             ->whitespace()->onceOrMore()

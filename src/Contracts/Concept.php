@@ -2,11 +2,10 @@
 
 namespace Luniar\Alma\Contracts;
 
-use Luniar\Alma\Contracts\Context;
-use Luniar\Alma\Contracts\Fragmentable;
-use Luniar\Alma\Contracts\FragmentConcept;
+use SRL\Builder;
 
-interface Concept extends Fragmentable, FragmentConcept
+interface Concept
 {
-    public function fragments(): array;
+    public function startsWith(Builder $expression): string;
+    public function handle(Context $context, array $matches): void;
 }

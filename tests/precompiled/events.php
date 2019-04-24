@@ -2,23 +2,10 @@
 
 return [
     [
-        'key' => Luniar\Alma\Tests\Stubs\Concepts\EventConcept::class,
-        'type' => 'concept',
+        'key' => Luniar\Alma\Tests\Stubs\Concepts\Event::class,
         'value' => [
             [
-                'key' => Luniar\Alma\Tests\Stubs\Concepts\Event\EventStart::class,
-                'type' => 'fragment',
-                'value' => 'hello {',
-                'matches' => [
-                    'hello {',
-                    'hello',
-                    'eventName' => 'hello',
-                ],
-            ],
-
-            [
-                'key' => Luniar\Alma\Tests\Stubs\Concepts\Shared\Say::class,
-                'type' => 'fragment',
+                'key' => Luniar\Alma\Tests\Stubs\Concepts\Say::class,
                 'value' => '@say "Hello"',
                 'matches' => [
                     '@say "Hello"',
@@ -26,59 +13,36 @@ return [
                     'text' => 'Hello',
                 ],
             ],
-            [
-                'key' => Luniar\Alma\Tests\Stubs\Concepts\Event\EventFinish::class,
-                'type' => 'fragment',
-                'value' => '}',
-                'matches' => [
-                    '}',
-                ],
-            ],
-
+        ],
+        'matches' => [
+            'hello {',
+            'hello',
+            'eventName' => 'hello',
         ],
     ],
 
     [
-        'key' => Luniar\Alma\Tests\Stubs\Concepts\EventConcept::class,
-        'type' => 'concept',
+        'key' => Luniar\Alma\Tests\Stubs\Concepts\Event::class,
         'value' => [
             [
-                'key' => Luniar\Alma\Tests\Stubs\Concepts\Event\EventStart::class,
-                'type' => 'fragment',
-                'value' => 'world {',
-                'matches' => [
-                    'world {',
-                    'world',
-                    'eventName' => 'world',
-                ],
-            ],
-
-            [
-                'key' => Luniar\Alma\Tests\Stubs\Concepts\Shared\Say::class,
-                'type' => 'fragment',
+                'key' => Luniar\Alma\Tests\Stubs\Concepts\Say::class,
                 'value' => '@say "World."',
                 'matches' => [
                     '@say "World."',
                     'World.',
                     'text' => 'World.',
                 ],
-
             ],
-
-            [
-                'key' => Luniar\Alma\Tests\Stubs\Concepts\Event\EventFinish::class,
-                'type' => 'fragment',
-                'value' => '}',
-                'matches' => [
-                    '}',
-                ],
-            ],
+        ],
+        'matches' => [
+            'world {',
+            'world',
+            'eventName' => 'world',
         ],
     ],
 
     [
-        'key' => Luniar\Alma\Tests\Stubs\Concepts\Listener\Listen::class,
-        'type' => 'fragment',
+        'key' => Luniar\Alma\Tests\Stubs\Concepts\Listen::class,
         'value' => '@listen hello',
         'matches' => [
             '@listen hello',
@@ -87,8 +51,7 @@ return [
     ],
 
     [
-        'key' => Luniar\Alma\Tests\Stubs\Concepts\Listener\Listen::class,
-        'type' => 'fragment',
+        'key' => Luniar\Alma\Tests\Stubs\Concepts\Listen::class,
         'value' => '@listen world',
         'matches' => [
             '@listen world',

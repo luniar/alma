@@ -13,7 +13,7 @@ abstract class Context implements ContextContract
         $this->state = new State();
     }
 
-    public abstract function fragments(): array;
+    public abstract function concepts(): array;
     public abstract function handle();
 
     public function group(string $group): ContextContract

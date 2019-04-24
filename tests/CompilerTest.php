@@ -25,6 +25,7 @@ class CompilerTest extends TestCase
         $result = $this->compiler->compileFromFile(__DIR__ . '/stubs/events.alma', $this->context);
 
         $response = require 'responses/events_context.php';
+
         $this->assertEquals($response, $result);
     }
 
@@ -43,6 +44,7 @@ class CompilerTest extends TestCase
         $result = $this->compiler->precompileFromFile(__DIR__ . '/stubs/events.alma', $this->context);
 
         $precompiled = require 'precompiled/events.php';
+
         $this->assertEquals($precompiled, $result);
     }
 }

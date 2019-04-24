@@ -40,7 +40,7 @@ class Compiler implements CompilerContract
         return $this->parser->precompile(
             $this->formatContents($contents),
             $context,
-            $context->fragments()
+            $context->concepts()
         );
     }
 

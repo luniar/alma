@@ -3,8 +3,8 @@
 namespace Luniar\Alma\Tests\Stubs\Contexts;
 
 use Luniar\Alma\Context;
-use Luniar\Alma\Tests\Stubs\Concepts\EventConcept;
-use Luniar\Alma\Tests\Stubs\Concepts\Listener\Listen;
+use Luniar\Alma\Tests\Stubs\Concepts\Event;
+use Luniar\Alma\Tests\Stubs\Concepts\Listen;
 
 class EventsContext extends Context
 {
@@ -14,10 +14,10 @@ class EventsContext extends Context
         return $this->state->get();
     }
 
-    public function fragments() : array
+    public function concepts() : array
     {
         return [
-            new EventConcept,
+            new Event,
             new Listen,
         ];
     }

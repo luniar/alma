@@ -2,8 +2,8 @@
 
 namespace Luniar\Alma\Tests;
 
+use Luniar\Alma\Contracts\Concept;
 use Luniar\Alma\Contracts\Context;
-use Luniar\Alma\Contracts\Fragment;
 use Luniar\Alma\Parser;
 use PHPUnit\Framework\TestCase;
 
@@ -13,7 +13,7 @@ class ParserTest extends TestCase
     function it_is_able_to_compile_and_handle_dsl_files()
     {
         $context = $this->createContext(function ($context) {
-            $context->method('fragments')->willReturn([
+            $context->method('concepts')->willReturn([
                 $this->createFragment('@example')
             ]);
 
@@ -36,10 +36,9 @@ class ParserTest extends TestCase
 
     protected function createFragment($key, $closure = null)
     {
-        $stub = $this->createMock(Fragment::class);
+        $stub = $this->createMock(Concept::class);
 
-        $stub->method('key')->willReturn($key);
-        $stub->method('expression')->willReturn('/^'.$key.'/');
+        $stub->method('startsWith')->willReturn('/^'.$key.'/');
         $self = $this;
 
         if ($closure != null) {

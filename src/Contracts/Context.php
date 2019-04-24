@@ -4,7 +4,7 @@ namespace Luniar\Alma\Contracts;
 
 interface Context
 {
-    public function fragments(): array;
+    public function concepts(): array;
     public function handle();
     public function group(string $group): Context;
 

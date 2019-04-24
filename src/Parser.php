@@ -2,20 +2,19 @@
 
 namespace Luniar\Alma;
 
-use Luniar\Alma\Contracts\Context;
-use Luniar\Alma\Contracts\Parser as ParserContract;
+use Luniar\Alma\ConceptMatcher;
+use Luniar\Alma\ConceptResolver;
 use Luniar\Alma\Contracts\Concept;
-use Luniar\Alma\Contracts\Fragment;
-use Luniar\Alma\Contracts\FragmentConcept;
-use Luniar\Alma\FragmentResolver;
-use \InvalidArgumentException;
+use Luniar\Alma\Contracts\Context;
+use Luniar\Alma\Contracts\MultilineConcept;
+use Luniar\Alma\Contracts\Parser as ParserContract;
 
 class Parser implements ParserContract
 {
     public function parse(array $contents, Context $context): void
     {
         $this->parseCompiled(
-            $this->precompile($contents, $context, $context->fragments(), []),
+            $this->precompile($contents, $context, $context->concepts(), []),
             $context
         );
     }
@@ -28,19 +27,21 @@ class Parser implements ParserContract
 
         $block = array_shift($compiled);
 
+        $concept = new $block['key'];
+        $concept->handle($context, $block['matches']);
+
         if (is_array($block['value'])) {
             $this->parseCompiled($block['value'], $context);
-            $this->parseCompiled($compiled, $context);
-            return;
         }
 
-        $fragment = new $block['key'];
-        $fragment->handle($context, $block['matches']); // could also pass the args here..
+        if ($concept instanceof MultilineConcept) {
+            $concept->close($context);
+        }
 
         $this->parseCompiled($compiled, $context);
     }
 
-    public function precompile(array $contents, Context $context, array $fragments, array $result = []): array
+    public function precompile(array $contents, Context $context, array $concepts, array $result = []): array
     {
         if (count($contents) == 0) {
             return $result;
@@ -48,12 +49,12 @@ class Parser implements ParserContract
 
         $line = trim(array_shift($contents));
 
-        $result = $this->compileFragments($contents, $context, $fragments, $line, $result);
+        $result = $this->compileConcepts($contents, $context, $concepts, $line, $result);
 
-        return $this->precompile($contents, $context, $fragments, $result);
+        return $this->precompile($contents, $context, $concepts, $result);
     }
 
-    protected function compileConcept(Fragment $last, array &$contents, Context $context, array $fragments, array $result): array
+    protected function compileConcept(MultilineConcept $concept, array &$contents, Context $context, array $concepts, array $result): array
     {
         if (count($contents) == 0) {
             return $result;
@@ -61,72 +62,61 @@ class Parser implements ParserContract
 
         $line = trim(array_shift($contents));
 
-        if ($last->matches($line)) {
-            $result[] = $this->formatFragment($last, $line);
+        if (ConceptMatcher::endsWith($concept, $line)) {
             return $result;
         }
 
-        $result = $this->compileFragments($contents, $context, $fragments, $line, $result);
+        if (count($concepts) > 0) {
+            $result = $this->compileConcepts($contents, $context, $concepts, $line, $result);
+        }
 
-        return $this->compileConcept($last, $contents, $context, $fragments, $result);
+        return $this->compileConcept($concept, $contents, $context, $concepts, $result);
     }
 
-    protected function compileFragments(array &$contents, Context $context, array $fragments, string $line, array $result): array
+    protected function compileConcepts(array &$contents, Context $context, array $concepts, string $line, array $result): array
     {
-        foreach ($fragments as $fragment) {
-            $fragment = FragmentResolver::resolve($fragment);
+        foreach ($concepts as $concept) {
+            $concept = ConceptResolver::resolve($concept);
 
-            if (! $fragment->matches($line)) {
+            if (! ConceptMatcher::startsWith($concept, $line)) {
                 continue;
             }
 
-            if ($fragment instanceof Fragment) {
-                $result[] = $this->formatFragment($fragment, $line);
-                break;
-            }
-
-            if ($fragment instanceof FragmentConcept) {
-                $group = $fragment; // alias just to improve reading
-                $newFragments = $group->fragments();
-                $lastFragment = array_pop($newFragments);
-
-                $groupResult = $this->compileConcept(
-                    new $lastFragment,
+            if ($concept instanceof MultilineConcept) {
+                $conceptResult = $this->compileConcept(
+                    $concept,
                     $contents,
                     $context,
-                    $group->fragments(),
+                    $concept->concepts(),
                     []
                 );
 
-                $result[] = $this->formatFragmentConcept($group, $line, $groupResult);
+                $result[] = $this->formatMultilineConcept($concept, $line, $conceptResult);
                 break;
             }
 
-            throw new InvalidArgumentException('An invalid fragment was passed to the parser.');
+            $result[] = $this->formatConcept($concept, $line);
+            break;
         }
 
         return $result;
     }
 
-    protected function formatFragment(Fragment $fragment, string $line): array
+    protected function formatConcept(Concept $concept, string $line): array
     {
         return [
-            'key' => get_class($fragment),
-            'type' => 'fragment',
+            'key' => get_class($concept),
             'value' => $line,
-            'matches' => $fragment->getMatches($line),
+            'matches' => ConceptMatcher::getMatches($concept, $line),
         ];
     }
 
-    protected function formatFragmentConcept(Concept $group, string $line, array $result): array
+    protected function formatMultilineConcept(MultilineConcept $concept, string $line, array $result): array
     {
-        $fragmentClass = $group->fragments()[0];
-        $fragment = new $fragmentClass;
-
         return [
-            'key' => get_class($group),
-            'type' => 'concept',
-            'value' => array_merge([$this->formatFragment($fragment, $line)], $result),
+            'key' => get_class($concept),
+            'value' => $result,
+            'matches' => ConceptMatcher::getMatches($concept, $line),
         ];
     }
 
