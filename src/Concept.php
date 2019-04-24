@@ -3,20 +3,20 @@
 namespace Luniar\Alma;
 
 use Luniar\Alma\Contracts\Concept as ConceptContract;
-use Luniar\Alma\TokenResolver;
+use Luniar\Alma\FragmentResolver;
 
 abstract class Concept implements ConceptContract
 {
-	protected $tokens = [];
+	protected $fragments = [];
 
-    public function tokens() : array
+    public function fragments() : array
     {
-        return $this->tokens;
+        return $this->fragments;
     }
 
     public function matches(string $line): bool
     {
-        return TokenResolver::resolve($this->tokens[0])->getMatches($line) !== null;
+        return FragmentResolver::resolve($this->fragments[0])->getMatches($line) !== null;
     }
 
 }

@@ -3,10 +3,10 @@
 namespace Luniar\Alma;
 
 use Luniar\Alma\Contracts\Context;
-use Luniar\Alma\Contracts\Token as TokenContract;
+use Luniar\Alma\Contracts\Fragment as FragmentContract;
 use SRL\Builder;
 
-abstract class Token implements TokenContract
+abstract class Fragment implements FragmentContract
 {
     public abstract function key() : string;
     public abstract function expression(Builder $expression) : string;

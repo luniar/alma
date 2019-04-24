@@ -3,10 +3,10 @@
 namespace Luniar\Alma\Contracts;
 
 use Luniar\Alma\Contracts\Context;
-use Luniar\Alma\Contracts\Tokenable;
+use Luniar\Alma\Contracts\Fragmentable;
 use SRL\Builder;
 
-interface Token extends Tokenable
+interface Fragment extends Fragmentable
 {
     public function key(): string;
     public function expression(Builder $expression): string;

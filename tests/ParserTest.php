@@ -3,7 +3,7 @@
 namespace Luniar\Alma\Tests;
 
 use Luniar\Alma\Contracts\Context;
-use Luniar\Alma\Contracts\Token;
+use Luniar\Alma\Contracts\Fragment;
 use Luniar\Alma\Parser;
 use PHPUnit\Framework\TestCase;
 
@@ -13,8 +13,8 @@ class ParserTest extends TestCase
     function it_is_able_to_compile_and_handle_dsl_files()
     {
         $context = $this->createContext(function ($context) {
-            $context->method('tokens')->willReturn([
-                $this->createToken('@example')
+            $context->method('fragments')->willReturn([
+                $this->createFragment('@example')
             ]);
 
             $context->method('handle')->willReturn([
@@ -34,9 +34,9 @@ class ParserTest extends TestCase
         return $stub;
     }
 
-    protected function createToken($key, $closure = null)
+    protected function createFragment($key, $closure = null)
     {
-        $stub = $this->createMock(Token::class);
+        $stub = $this->createMock(Fragment::class);
 
         $stub->method('key')->willReturn($key);
         $stub->method('expression')->willReturn('/^'.$key.'/');

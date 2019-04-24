@@ -3,10 +3,10 @@
 namespace Luniar\Alma\Tests\Stubs\Concepts\Shared;
 
 use Luniar\Alma\Contracts\Context;
-use Luniar\Alma\Token;
+use Luniar\Alma\Fragment;
 use SRL\Builder;
 
-class SayToken extends Token
+class SayFragment extends Fragment
 {
     public function key() : string
     {

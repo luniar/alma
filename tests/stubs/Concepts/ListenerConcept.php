@@ -3,11 +3,11 @@
 namespace Luniar\Alma\Tests\Stubs\Concepts;
 
 use Luniar\Alma\Concept;
-use Luniar\Alma\Tests\Stubs\Concepts\Listener\ListenToken;
+use Luniar\Alma\Tests\Stubs\Concepts\Listener\ListenFragment;
 
 class ListenerConcept extends Concept
 {
-    protected $tokens = [
-        ListenToken::class,
+    protected $fragments = [
+        ListenFragment::class,
     ];
 }

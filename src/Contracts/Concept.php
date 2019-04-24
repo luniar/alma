@@ -3,10 +3,10 @@
 namespace Luniar\Alma\Contracts;
 
 use Luniar\Alma\Contracts\Context;
-use Luniar\Alma\Contracts\Tokenable;
-use Luniar\Alma\Contracts\TokenConcept;
+use Luniar\Alma\Contracts\Fragmentable;
+use Luniar\Alma\Contracts\FragmentConcept;
 
-interface Concept extends Tokenable, TokenConcept
+interface Concept extends Fragmentable, FragmentConcept
 {
-    public function tokens(): array;
+    public function fragments(): array;
 }

@@ -3,10 +3,10 @@
 namespace Luniar\Alma\Tests\Stubs\Concepts\Event;
 
 use Luniar\Alma\Contracts\Context;
-use Luniar\Alma\Token;
+use Luniar\Alma\Fragment;
 use SRL\Builder;
 
-class EventFinishToken extends Token
+class EventFinishFragment extends Fragment
 {
     public function key() : string
     {

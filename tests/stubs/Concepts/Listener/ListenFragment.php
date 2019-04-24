@@ -3,10 +3,10 @@
 namespace Luniar\Alma\Tests\Stubs\Concepts\Listener;
 
 use Luniar\Alma\Contracts\Context;
-use Luniar\Alma\Token;
+use Luniar\Alma\Fragment;
 use SRL\Builder;
 
-class ListenToken extends Token
+class ListenFragment extends Fragment
 {
     public function key() : string
     {
