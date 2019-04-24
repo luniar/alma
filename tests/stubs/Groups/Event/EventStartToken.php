@@ -4,6 +4,7 @@ namespace Luniar\Alma\Tests\Stubs\Groups\Event;
 
 use Luniar\Alma\Contracts\Context;
 use Luniar\Alma\Token;
+use SRL\Builder;
 
 class EventStartToken extends Token
 {
@@ -12,15 +13,20 @@ class EventStartToken extends Token
         return 'EVENT_START';
     }
 
-    public function expression() : string
+    public function expression(Builder $expression) : string
     {
-        return '/^([a-zA-Z]+)\s+{/';
+        return $expression->startsWith()
+            ->capture(function (Builder $expression) {
+                $expression->letter()->atLeast(2);
+            }, 'eventName')
+            ->whitespace()->onceOrMore()
+            ->literally('{')->mustEnd()->caseInsensitive();
     }
 
     public function handle(Context $context, array $matches): void
     {
-        $context->group('events')->begin($matches[1], [
-            'event' => $matches[1],
+        $context->group('events')->begin($matches['eventName'], [
+            'event' => $matches['eventName'],
         ]);
     }
 

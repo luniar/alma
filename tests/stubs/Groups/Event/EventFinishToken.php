@@ -4,6 +4,7 @@ namespace Luniar\Alma\Tests\Stubs\Groups\Event;
 
 use Luniar\Alma\Contracts\Context;
 use Luniar\Alma\Token;
+use SRL\Builder;
 
 class EventFinishToken extends Token
 {
@@ -12,9 +13,9 @@ class EventFinishToken extends Token
         return 'EVENT_FINISH';
     }
 
-    public function expression() : string
+    public function expression(Builder $expression) : string
     {
-        return '/^}/';
+        return $expression->literally('}')->mustEnd();
     }
 
     public function handle(Context $context, array $matches): void

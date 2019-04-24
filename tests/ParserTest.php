@@ -22,7 +22,7 @@ class ParserTest extends TestCase
             ]);
         });
 
-        (new Parser)->parse('@example', $context);
+        (new Parser)->parse(['@example'], $context);
     }
 
     protected function createContext($closure)

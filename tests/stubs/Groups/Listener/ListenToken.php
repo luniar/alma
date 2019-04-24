@@ -4,6 +4,7 @@ namespace Luniar\Alma\Tests\Stubs\Groups\Listener;
 
 use Luniar\Alma\Contracts\Context;
 use Luniar\Alma\Token;
+use SRL\Builder;
 
 class ListenToken extends Token
 {
@@ -12,9 +13,14 @@ class ListenToken extends Token
         return 'LISTEN_TO_EVENT';
     }
 
-    public function expression() : string
+    public function expression(Builder $expression) : string
     {
-        return '/^@listen\s+([a-zA-Z]+)/';
+        return $expression->startsWith()->literally('@listen')
+            ->whitespace()->onceOrMore()
+            ->capture(function (Builder $expression) {
+                $expression->letter()->onceOrMore();
+            })
+            ->caseInsensitive();
     }
 
     public function handle(Context $context, array $matches): void
