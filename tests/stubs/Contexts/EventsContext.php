@@ -14,7 +14,7 @@ class EventsContext extends Context
         return $this->state->get();
     }
 
-    public function concepts() : array
+    public function concepts(): array
     {
         return [
             new Event,
@@ -27,7 +27,7 @@ class EventsContext extends Context
         $this->state->push($event);
     }
 
-    public function say($message)
+    protected function say($message)
     {
         $this->state->push('actions', [
             'class' => 'SayAction',

@@ -47,6 +47,7 @@ return [
         'matches' => [
             '@listen hello',
             'hello',
+            'event' => 'hello',
         ],
     ],
 
@@ -56,6 +57,7 @@ return [
         'matches' => [
             '@listen world',
             'world',
+            'event' => 'world',
         ],
     ],
 ];

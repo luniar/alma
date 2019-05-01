@@ -14,14 +14,14 @@ class Listen implements Concept
             ->whitespace()->onceOrMore()
             ->capture(function (Builder $expression) {
                 $expression->letter()->onceOrMore();
-            })
+            }, 'event')
             ->caseInsensitive();
     }
 
     public function handle(Context $context, array $matches): void
     {
-        $context->group('listeners')->begin($matches[1]);
-        $context->commit('listen', $matches[1]);
+        $context->group('listeners')->begin($matches['event']);
+        $context->commit('listen', $matches['event']);
         $context->finish();
     }
 
