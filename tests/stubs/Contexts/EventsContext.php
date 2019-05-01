@@ -3,8 +3,8 @@
 namespace Luniar\Alma\Tests\Stubs\Contexts;
 
 use Luniar\Alma\Context;
-use Luniar\Alma\Tests\Stubs\Groups\EventGroup;
-use Luniar\Alma\Tests\Stubs\Groups\Listener\ListenToken;
+use Luniar\Alma\Tests\Stubs\Concepts\Event;
+use Luniar\Alma\Tests\Stubs\Concepts\Listen;
 
 class EventsContext extends Context
 {
@@ -14,11 +14,11 @@ class EventsContext extends Context
         return $this->state->get();
     }
 
-    public function tokens() : array
+    public function concepts(): array
     {
         return [
-            new EventGroup,
-            new ListenToken,
+            new Event,
+            new Listen,
         ];
     }
 
@@ -27,7 +27,7 @@ class EventsContext extends Context
         $this->state->push($event);
     }
 
-    public function say($message)
+    protected function say($message)
     {
         $this->state->push('actions', [
             'class' => 'SayAction',

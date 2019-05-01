@@ -61,9 +61,7 @@ class State implements StateContract
 
     public function merge(): void
     {
-        $length = count($this->previous);
-
-        if ($length > 1) {
+        if (count($this->previous) > 1) {
             $this->current = array_merge(array_pop($this->previous) ?? [], [array_pop($this->keys) => $this->current]);
             return;
         }

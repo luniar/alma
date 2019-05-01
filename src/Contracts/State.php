@@ -2,8 +2,6 @@
 
 namespace Luniar\Alma\Contracts;
 
-use Luniar\Alma\Contracts\Context;
-
 interface State
 {
     public function create(string $key, array $arguments = []): void;
