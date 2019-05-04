@@ -2,10 +2,8 @@
 
 namespace Luniar\Alma\Contracts;
 
-use Luniar\Alma\Contracts\Context;
-
 interface Compiler
 {
-    public function compile(string $contents, Context $context);
-    public function compileFromFile(string $path, Context $context);
+    public function compile(string $contents, array $concepts);
+    public function compileFromFile(string $path, array $concepts);
 }

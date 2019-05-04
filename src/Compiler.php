@@ -6,20 +6,19 @@ use Luniar\Alma\Contracts\Compiler as CompilerContract;
 use Luniar\Alma\ConceptMatcher;
 use Luniar\Alma\ConceptResolver;
 use Luniar\Alma\Contracts\Concept;
-use Luniar\Alma\Contracts\Context;
 use Luniar\Alma\Contracts\MultilineConcept;
 
 class Compiler implements CompilerContract
 {
 
-    public function compileFromFile(string $path, Context $context)
+    public function compileFromFile(string $path, array $concepts)
     {
-        return $this->compile(file_get_contents($path), $context);
+        return $this->compile(file_get_contents($path), $concepts);
     }
 
-    public function compile(string $contents, Context $context)
+    public function compile(string $contents, array $concepts)
     {
-        return $this->precompile($this->formatContents($contents), $context, $context->concepts(), []);
+        return $this->precompile($this->formatContents($contents), $concepts, []);
     }
 
     protected function formatContents(string $contents): array
@@ -27,7 +26,7 @@ class Compiler implements CompilerContract
         return explode(PHP_EOL, $contents);
     }
 
-    public function precompile(array $contents, Context $context, array $concepts, array $result = []): array
+    public function precompile(array $contents, array $concepts, array $result = []): array
     {
         if (count($contents) == 0) {
             return $result;
@@ -35,12 +34,12 @@ class Compiler implements CompilerContract
 
         $line = trim(array_shift($contents));
 
-        $result = $this->compileConcepts($contents, $context, $concepts, $line, $result);
+        $result = $this->compileConcepts($contents, $concepts, $line, $result);
 
-        return $this->precompile($contents, $context, $concepts, $result);
+        return $this->precompile($contents, $concepts, $result);
     }
 
-    protected function compileConcept(MultilineConcept $concept, array &$contents, Context $context, array $concepts, array $result): array
+    protected function compileConcept(MultilineConcept $concept, array &$contents, array $concepts, array $result): array
     {
         if (count($contents) == 0) {
             return $result;
@@ -53,13 +52,13 @@ class Compiler implements CompilerContract
         }
 
         if (count($concepts) > 0) {
-            $result = $this->compileConcepts($contents, $context, $concepts, $line, $result);
+            $result = $this->compileConcepts($contents, $concepts, $line, $result);
         }
 
-        return $this->compileConcept($concept, $contents, $context, $concepts, $result);
+        return $this->compileConcept($concept, $contents, $concepts, $result);
     }
 
-    protected function compileConcepts(array &$contents, Context $context, array $concepts, string $line, array $result): array
+    protected function compileConcepts(array &$contents, array $concepts, string $line, array $result): array
     {
         foreach ($concepts as $concept) {
             $concept = ConceptResolver::resolve($concept);
@@ -74,7 +73,6 @@ class Compiler implements CompilerContract
                 $value = $this->compileConcept(
                     $concept,
                     $contents,
-                    $context,
                     $concept->concepts(),
                     []
                 );

@@ -21,7 +21,7 @@ class CompilerTest extends TestCase
     /** @test */
     function it_compiles_raw_contents()
     {
-        $result = $this->compiler->compile('@listen test', $this->context);
+        $result = $this->compiler->compile('@listen test', $this->context->concepts());
 
         $this->assertEquals(count($result), 1);
         $this->assertEquals($result[0]['key'], Listen::class);
@@ -32,7 +32,7 @@ class CompilerTest extends TestCase
     /** @test */
     function it_compiles_contents_from_a_file()
     {
-        $result = $this->compiler->compileFromFile(__DIR__ . '/stubs/events.alma', $this->context);
+        $result = $this->compiler->compileFromFile(__DIR__ . '/stubs/events.alma', $this->context->concepts());
 
         $precompiled = require 'compiled/events.php';
 
